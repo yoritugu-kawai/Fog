@@ -23,7 +23,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Novice::Initialize(kWindowTitle, kCHei, kCWid);
 	//int back = Novice::LoadTexture("./Resources./whitemountain.png");
 
-	int mont= Novice::LoadTexture("./Resources./mountain.png");
+	int mont = Novice::LoadTexture("./Resources./mountain.png");
 
 
 
@@ -78,16 +78,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		Color = clamp(Color, 0, 255);
 		s = clamp(s, 0, 100);
-			///
-		/// ↑更新処理ここまで
 		///
+	/// ↑更新処理ここまで
+	///
 
-		///
-		/// ↓描画処理ここから
-		///
+	///
+	/// ↓描画処理ここから
+	///
 
 		Novice::DrawSprite(0, 10, mont, 1, 1, 0.0f, law(red, green, blue, Color));
-		Novice::DrawBox(640-s/2, 600-s/2, s, s, 0.0f, 0xffffffff, kFillModeSolid);
+		Novice::DrawBox(640 - s / 2, 600 - s / 2, s, s, 0.0f, 0xffffffff, kFillModeSolid);
 
 		///
 		/// ↑描画処理ここまで
