@@ -1,8 +1,13 @@
 ﻿#include <Novice.h>
-
+#include <cmath>
 const char kWindowTitle[] = "LE2B_08_カワイヨリツグ_タイトル";
 
-
+int law(unsigned int red, unsigned int  green, unsigned int blue, int  alpha)
+{
+	//unsigned char top = 0x;
+	int color = (red << 24) | (green << 16) | (blue << 8) | alpha;
+	return color;
+}
 
 int clamp(int suteji, int min, int max) {
 	if (suteji <= min) return min;
@@ -16,33 +21,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int  kCHei = 1280;
 	int  kCWid = 720;
 	Novice::Initialize(kWindowTitle, kCHei, kCWid);
-	int back = Novice::LoadTexture("./Resources./Fog.png");
-	
-	int mont[3];
-		mont[0]=  Novice::LoadTexture("./Resources./mountain.png");
-		mont[1] = Novice::LoadTexture("./Resources./mountain.png");
-		mont[2] = Novice::LoadTexture("./Resources./mountain.png");
-		
-		/*const int kost = 10000;
-		int boxX[kost] = { 0 };
-		int boxY[kost] = { 0 };
-		int siz[kost] = { 0 };
-		int frg[kost] = { false };
-		int speed[kost] = { 0 };
-		
-	
-		for (int i = 0; i < kost; i++) {
+	//int back = Novice::LoadTexture("./Resources./whitemountain.png");
 
-			boxX[i] = 0;
-			boxY[i] = 0;
-			siz[i] = 3;
-			speed[i] = 0;
+	int mont= Novice::LoadTexture("./Resources./mountain.png");
 
 
-		}*/
+
+	float Red = 255.0f;
+	float Green = 255.0f;
+	float Blue = 255.0f;
+	int Color = 255;
+
+	int s = 50;
+	float distance = 2.0f;
+	float changeRate = 0.0f;
 	// キー入力結果を受け取る箱
-	char keys[256] = {0};
-	char preKeys[256] = {0};
+	char keys[256] = { 0 };
+	char preKeys[256] = { 0 };
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -56,60 +51,44 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓更新処理ここから
 		///
-		/*for (int i = 0; i < kost; i++) {
-			if (frg[i] == false) {
-				frg[i] = true;
-				boxX[i] = rand() % 1100 + 700;
-				boxY[i] = rand() % 10 + 1000;
-				speed[i] = 0;
-				break;
-			}
+
+		changeRate = 1.0f / log(distance * 2);
+
+
+		float blue = Blue * changeRate;
+		float green = Green * changeRate;
+		float red = Red * changeRate;
+
+		if (keys[DIK_UP]) {
+			distance += 0.01f;
+			s += 1;
+			Color += 2;
+		}
+		if (keys[DIK_DOWN]) {
+			distance -= 0.01f;
+			s -= 1;
+			Color -= 2;
 		}
 
-		for (int i = 0; i < kost; i++) {
-			if (frg[i] == true) {
-				boxY[i] -= speed[i];
-				speed[i] = 2;
-			}
+		if (distance <= 1.58f) {
+			distance = 1.60f;
 		}
-
-
-
-		for (int i = 0; i < kost; i++) {
-			if (boxY[i] <= 200) {
-				frg[i] = false;
-			}
-		}*/
-
-
-	
-		///
+		if (distance >= 5.0f) {
+			distance = 4.90f;
+		}
+		Color = clamp(Color, 0, 255);
+		s = clamp(s, 0, 100);
+			///
 		/// ↑更新処理ここまで
 		///
 
 		///
 		/// ↓描画処理ここから
 		///
-	
-		
-		//Novice::DrawSprite(0, 0, back, 1, 1, 0.0f, 0xffffffff);
-		
-		//Novice::SetBlendMode(BlendMode::kBlendModeAdd);
-		
-		Novice::DrawSprite(500, 0, mont[2], 1, 1, 0.0f, 0xffffffff);
-		Novice::SetBlendMode(BlendMode::kBlendModeAdd);
-		/*for (int i = 0; i < kost; i++) {
-			if (frg[i] == true) {
-				Novice::DrawSprite(boxX[i], boxY[i], back, siz[i], siz[i], 0.0f, 0xffffff64);
-			}
-		}*/
-		Novice::SetBlendMode(BlendMode::kBlendModeNormal);
-		Novice::DrawSprite(0, 10, mont[1], 1, 1, 0.0f, 0xffffffff);
 
-		//Novice::SetBlendMode(BlendMode::kBlendModeSubtract);
-		
-		Novice::DrawSprite(300, 200, mont[0], 1, 1, 0.0f, 0xffffffff);
-		
+		Novice::DrawSprite(0, 10, mont, 1, 1, 0.0f, law(red, green, blue, Color));
+		Novice::DrawBox(640-s/2, 600-s/2, s, s, 0.0f, 0xffffffff, kFillModeSolid);
+
 		///
 		/// ↑描画処理ここまで
 		///
